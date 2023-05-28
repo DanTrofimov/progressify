@@ -9,15 +9,28 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:json"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "progressify.helloWorld",
-        "title": "Hello World"
+        "command": "progressify.startPreview",
+        "title": "Manifest Preview",
+        "category": "Preview"
       }
-    ]
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "progressify.startPreview",
+          "when": "true",
+          "alt": "Preview",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
