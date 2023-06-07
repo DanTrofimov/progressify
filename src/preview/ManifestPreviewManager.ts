@@ -1,6 +1,7 @@
 // DOM nodes and styles orchestrator for static files preview
 import * as vscode from 'vscode';
 import { isManifest } from '../utils/isManifest';
+import { previewTemplate } from '../utils/previewTemplate';
 
 enum Command {
     update ='update_preview'
@@ -17,12 +18,6 @@ export class ManifestPreviewManager {
 
     constructor(context: vscode.ExtensionContext) {
         this._extensionPath = context.extensionUri;
-
-		if (!(this._extensionPath instanceof vscode.Uri)) {
-		  if (vscode.window.activeTextEditor) {
-			this._extensionPath = vscode.window.activeTextEditor.document.uri;
-		  }
-		}
 
         this._webViewPanel = vscode.window.createWebviewPanel(
             "progressify-manifest-preview",
@@ -73,31 +68,11 @@ export class ManifestPreviewManager {
 
     public getPreviewInitialContent(): string {
         const webview = this._webViewPanel.webview;
-        const initialStylesPath = vscode.Uri.joinPath(this._extensionPath, 'assets', 'styles', 'initial.css');
-        const scripts = vscode.Uri.joinPath(this._extensionPath, 'assets', 'scripts', 'index.js');
+        const stylesPath = vscode.Uri.joinPath(this._extensionPath, 'assets', 'styles', 'initial.css');
+        const scriptsPath = vscode.Uri.joinPath(this._extensionPath, 'assets', 'scripts', 'index.js');
 
-        return `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <link rel="stylesheet" type="text/css" href="${webview.asWebviewUri(initialStylesPath)}">
-                <title>Cat Coding</title>
-            </head>
+        previewTemplate(webview.asWebviewUri(stylesPath), webview.asWebviewUri(scriptsPath));
 
-                <body>
-                    <div class="preview-container">
-                        <header class="preview-header">
-                            
-                        </header>
-                        <main class="preview-app-content">
-                            
-                        </main>
-                    </div>
-                    <script type="text/javascript" src="${webview.asWebviewUri(scripts)}"></script>
-                </body>
-            </html>
-        `;
+        return previewTemplate(webview.asWebviewUri(stylesPath), webview.asWebviewUri(scriptsPath));
       }
 }
