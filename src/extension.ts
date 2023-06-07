@@ -6,14 +6,15 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand(
 			"progressify.sidePreview",
 
-			() => new ManifestPreviewManager(context),
+			() => {
+				const manifestPreviewManager = new ManifestPreviewManager(context);
+
+				vscode.workspace.onDidChangeTextDocument((e) => {
+					manifestPreviewManager.updatePreviewContent(e.document.uri);
+				});
+			}
 		),
 	);
-
-	vscode.workspace.onDidChangeTextDocument((e) => {
-		const manifestPreviewManager = new ManifestPreviewManager(context);
-		manifestPreviewManager.updatePreviewContent(e.document.uri);
-	});
 }
 
 export function deactivate() {

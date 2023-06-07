@@ -1,9 +1,9 @@
 // DOM nodes and styles orchestrator for static files preview
 import * as vscode from 'vscode';
-import { MessageChannel } from 'worker_threads';
+import { isManifest } from '../utils/isManifest';
 
 enum Command {
-    update ='source:update'
+    update ='update_preview'
 }
 
 interface IMessage {
@@ -38,10 +38,15 @@ export class ManifestPreviewManager {
         );
 
         this._webViewPanel.webview.html = this.getPreviewInitialContent();
+        
+        this.updatePreviewContentOnInit();
     }
 
-    public async updatePreviewContent(documentUri: vscode.Uri) {
-        const message = await this.getUpdateWebViewMessage(documentUri);
+    public async updatePreviewContent(uri: vscode.Uri) {
+
+        if (!isManifest(uri)) {return;}
+
+        const message = await this.getUpdateWebViewMessage(uri);
 
         this._webViewPanel.webview.postMessage(message);
     }
@@ -53,6 +58,13 @@ export class ManifestPreviewManager {
             command: Command.update,
             payload: document.getText()
         };
+    }
+
+    public async updatePreviewContentOnInit() {
+        const openTextDocument = this.getActiveEditorUri();
+        if (openTextDocument) {
+            this.updatePreviewContent(openTextDocument);
+        }
     }
 
     protected getActiveEditorUri(): vscode.Uri | undefined {
