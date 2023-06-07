@@ -3,47 +3,39 @@ import * as vscode from 'vscode';
 
 export class ManifestPreviewManager {
     private _extensionPath: vscode.Uri;
+    private _webViewPanel: vscode.WebviewPanel;
 
     constructor(context: vscode.ExtensionContext) {
         this._extensionPath = context.extensionUri;
-    }
 
-    public initPreview(
-        viewOptions: { 
-            sourceUri?: vscode.Uri,
-            viewColumn: vscode.ViewColumn; 
-            preserveFocus?: boolean 
-        },
-        resource?: vscode.Uri) {
-        const panel = vscode.window.createWebviewPanel(
+		if (!(this._extensionPath instanceof vscode.Uri)) {
+		  if (vscode.window.activeTextEditor) {
+			this._extensionPath = vscode.window.activeTextEditor.document.uri;
+		  }
+		}
+
+        this._webViewPanel = vscode.window.createWebviewPanel(
             "progressify-manifest-preview",
             "Manifest Preview",
-            viewOptions,
+            {
+                viewColumn: vscode.ViewColumn.Two,
+                preserveFocus: true,
+            },
             {
                 enableFindWidget: true,
                 enableScripts: true,
             },
         );
 
-        panel.webview.html = this.getWebviewContent(panel);
+        this._webViewPanel.webview.html = this.getPreviewInitialContent();
     }
 
-    public openPreviewToTheSide(uri?: vscode.Uri) {
-		let resource = uri;
-		if (!(resource instanceof vscode.Uri)) {
-		  if (vscode.window.activeTextEditor) {
-			resource = vscode.window.activeTextEditor.document.uri;
-		  }
-		}
-		
-        this.initPreview({
-		  viewColumn: vscode.ViewColumn.Two,
-		  preserveFocus: true,
-		}, resource);
-	}
+    public updatePreviewContent() {
+        
+    }
 
-    public getWebviewContent(panel: vscode.WebviewPanel): string {
-        const webview = panel.webview;
+    public getPreviewInitialContent(): string {
+        const webview = this._webViewPanel.webview;
         const initialStylesPath = vscode.Uri.joinPath(this._extensionPath, 'assets', 'styles', 'initial.css');
 
         console.log(initialStylesPath);
