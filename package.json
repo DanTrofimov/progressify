@@ -7,17 +7,31 @@
     "vscode": "^1.77.0"
   },
   "categories": [
-    "Other"
+    "Visualization"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "progressify.helloWorld",
-        "title": "Hello World"
+        "command": "progressify.sidePreview",
+        "title": "Progressify Preview",
+        "category": "Manifest",
+        "icon": {
+          "light": "./assets/preview-right-light.svg",
+          "dark": "./assets/preview-right-dark.svg"
+        }
       }
-    ]
+    ],
+    "menus": {
+      "editor/title": [
+          {
+              "command": "progressify.sidePreview",
+              "when": "editorLangId == json",
+              "group": "navigation"
+          }
+        ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",

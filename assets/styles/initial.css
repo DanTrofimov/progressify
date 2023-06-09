@@ -1,0 +1,145 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #bad9a2;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 9vh;
+}
+
+/* splash screen preview */
+
+.preview__splash-screen {
+  height: 72vh;
+  width: 34vh;
+  background-color: white;
+  border-radius: 3vh;
+  transition: all 0.4s;
+  filter: drop-shadow(0 0 15px rgb(133, 138, 143));
+}
+
+.preview__splash-screen:hover {
+  filter: drop-shadow(0 0 55px rgb(133, 138, 143));
+}
+
+.splash-screen__header {
+  height: 4vh;
+  width: 100%;
+  background-color: #9dc4b5;
+  transition: background-color 0.4s;
+  border-radius: 2.5vh 2.5vh 0 0;
+}
+
+.splash-screen__content {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+
+.splash-screen__content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.splash-screen__logo {
+  width: 16vh;
+}
+
+.splash-screen__name {
+  color: grey;
+  font-size: 2.5vh;
+}
+
+/* icons preview */
+
+.preview__icons {
+  display: flex;
+  gap: 23vh;
+  align-items: center;
+  flex-direction: column;
+}
+
+.icons__badge,
+.icons__shortcuts {
+  background-color: white;
+  border-radius: 4vh;
+  position: relative;
+  transition: all 0.4s;
+  filter: drop-shadow(0 0 15px rgb(133, 138, 143));
+}
+
+.icons__badge:hover,
+.icons__shortcuts:hover {
+  filter: drop-shadow(0 0 55px rgb(133, 138, 143));
+}
+
+.badge,
+.shortcuts {
+  position: absolute;
+}
+
+.app-icon__badge {
+  width: 22vh;
+}
+
+.badge {
+  margin-right: 0;
+  color: white;
+  background-color: red;
+  padding: 1vh;
+  border-radius: 50%;
+  height: 2.5vh;
+  width: 2.5vh;
+  font-weight: bold;
+  font-size: 2.2vh;
+  display: grid;
+  place-items: center;
+  top: -1vh;
+  right: -1vh;
+}
+
+.icons__shortcuts {
+  margin-left: 10vh;
+  border-radius: 2.5vh;
+}
+
+.app-icon__shortcuts {
+  width: 15vh;
+}
+
+.shortcuts {
+  top: -16vh;
+  left: -12vh;
+  height: 18vh;
+  width: 14vh;
+  background-color: white;
+  border-radius: 2vh;
+  border: 0.8vh solid #e5e6e8;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.shortcuts__item {
+  padding: 1.7vh;
+  text-align: center;
+  font-weight: bold;
+  color: grey;
+  font-size: 1.7vh;
+}
+
+.shortcuts__item:not(:last-child) {
+  border-bottom: 0.8vh solid #e5e6e8;
+}

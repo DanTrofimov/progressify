@@ -1,0 +1,36 @@
+{
+    "name": "WeatherApp",
+    "short_name": "WeatherApp",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#9dc4b5",
+    "description": "An app with weather data",
+    "icons": [
+      {
+        "src": "https://www.freeiconspng.com/thumbs/weather-icon-png/weather-icon-png-5.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "shortcuts" : [
+      {
+        "name": "Forecast",
+        "url": "/forecast"
+      },
+      {
+        "name": "Open Map",
+        "url": "/map"
+      },
+      {
+        "name": "Settings",
+        "url": "/settings"
+      }
+    ],
+    "related_applications": [
+      {
+        "platform": "play",
+        "url": "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
+      }
+    ]
+}
