@@ -18,7 +18,7 @@ function eventHandler(event) {
             onUpdate(payload);
             return;
         default:
-            console.log('Unknown command');
+            console.err('Unknown command');
     }
 };
 
@@ -36,7 +36,7 @@ function onUpdate(payload) {
     const parsedPayload = JSON.parse(payload);
 
     if (!validatePayload(parsedPayload)) {
-        console.log('Some required fields are expected');
+        console.err('Some required fields are expected');
         return;
     }
 
