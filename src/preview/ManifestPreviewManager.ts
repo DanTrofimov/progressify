@@ -2,37 +2,27 @@
 import * as vscode from 'vscode';
 import { isManifest } from '../utils/isManifest';
 import { previewTemplate } from '../utils/previewTemplate';
-
-enum Command {
-    update ='update_preview'
-}
-
-interface IMessage {
-    command: Command
-    payload: string
-}
+import { Command, IMessage } from './Message';
+import { ManifestPreview } from './ManifestPreview';
 
 export class ManifestPreviewManager {
     private _extensionPath: vscode.Uri;
-    private _webViewPanel: vscode.WebviewPanel;
+    private _preview: ManifestPreview;
 
     constructor(context: vscode.ExtensionContext) {
         this._extensionPath = context.extensionUri;
 
-        this._webViewPanel = vscode.window.createWebviewPanel(
-            "progressify-manifest-preview",
-            "Manifest Preview",
-            {
+        this._preview = new ManifestPreview({
                 viewColumn: vscode.ViewColumn.Two,
                 preserveFocus: true,
             },
             {
                 enableFindWidget: true,
                 enableScripts: true,
-            },
+            }
         );
 
-        this._webViewPanel.webview.html = this.getPreviewInitialContent();
+        this._preview.initContent(this.getPreviewInitialContent());
         
         this.updatePreviewContentOnInit();
     }
@@ -43,7 +33,7 @@ export class ManifestPreviewManager {
 
         const message = await this.getUpdateWebViewMessage(uri);
 
-        this._webViewPanel.webview.postMessage(message);
+        this._preview.postMessage(message);
     }
 
     private async getUpdateWebViewMessage (uri: vscode.Uri): Promise<IMessage> {
@@ -67,12 +57,9 @@ export class ManifestPreviewManager {
     }
 
     public getPreviewInitialContent(): string {
-        const webview = this._webViewPanel.webview;
         const stylesPath = vscode.Uri.joinPath(this._extensionPath, 'assets', 'styles', 'initial.css');
         const scriptsPath = vscode.Uri.joinPath(this._extensionPath, 'assets', 'scripts', 'index.js');
 
-        previewTemplate(webview.asWebviewUri(stylesPath), webview.asWebviewUri(scriptsPath));
-
-        return previewTemplate(webview.asWebviewUri(stylesPath), webview.asWebviewUri(scriptsPath));
+        return previewTemplate(this._preview.getAsWebviewUri(stylesPath), this._preview.getAsWebviewUri(scriptsPath));
       }
 }
