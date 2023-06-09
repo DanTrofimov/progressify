@@ -30,7 +30,7 @@ function validatePayload(payload) {
     if (!payload.display) {return false;};
     return true;
 }
-
+    
 function onUpdate(payload) {
 
     const parsedPayload = JSON.parse(payload);

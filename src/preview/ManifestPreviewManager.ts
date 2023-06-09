@@ -36,6 +36,13 @@ export class ManifestPreviewManager {
         this._preview.postMessage(message);
     }
 
+    public async updatePreviewContentOnInit() {
+        const openTextDocument = this.getActiveEditorUri();
+        if (openTextDocument) {
+            this.updatePreviewContent(openTextDocument);
+        }
+    }
+
     private async getUpdateWebViewMessage (uri: vscode.Uri): Promise<IMessage> {
         const document = await vscode.workspace.openTextDocument(uri);
     
@@ -43,13 +50,6 @@ export class ManifestPreviewManager {
             command: Command.update,
             payload: document.getText()
         };
-    }
-
-    public async updatePreviewContentOnInit() {
-        const openTextDocument = this.getActiveEditorUri();
-        if (openTextDocument) {
-            this.updatePreviewContent(openTextDocument);
-        }
     }
 
     protected getActiveEditorUri(): vscode.Uri | undefined {
