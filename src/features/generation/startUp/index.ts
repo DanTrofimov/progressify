@@ -6,7 +6,7 @@ const repositoryInputPrompt: string =
 const directoryInputPrompt: string = "Выберите директорию для PWA";
 const repositoryInputPlaceholder: string = repositoryInputPrompt;
 const noNameSelectedWarning: string =
-  "Не выбрано название репозитория, процесс генерации базовой структуры приостановлен";
+  "Не выбрано название репозитория";
 const noGitWarning: string =
   "Установка git обязательна, установить - https://git-scm.com/";
 const noNpmWarning: string =
@@ -22,7 +22,7 @@ const gitFileWatcher = vscode.workspace.createFileSystemWatcher(
   `**/${repositoryName}/.git/**`
 );
 
-export async function setUpLocalPwaStarterRepository(): Promise<void> {
+export async function startUpPWA(): Promise<void> {
   return new Promise(async (resolve, reject) => {
     await getRepositoryInfoFromInput();
 
@@ -78,7 +78,7 @@ async function getRepositoryDirectoryFromDialog(): Promise<void> {
 
 function initStarterRepository(): void {
   terminal.show();
-  changeDirectory(repositoryParentURI?.path.slice(1));
+  changeDirectory('~/' + repositoryParentURI?.path.slice(1).split('/').slice(2).toString().replace(/,/g, '/'));
   if (tryCloneFromGithub()) {
     tryNpmInstall();
   }
