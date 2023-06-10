@@ -5,6 +5,8 @@ import { IMessage } from './Message';
 export interface Preview {
     
     _previewSource: vscode.WebviewPanel;
+
+    getPreviewSource(): vscode.WebviewPanel
     
     initContent(eviewContent: string): void;
     

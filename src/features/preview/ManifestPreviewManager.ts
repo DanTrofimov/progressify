@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import { isManifest } from './utils/isManifest';
 import { previewTemplate } from './utils/previewTemplate';
+import { getUri } from '../../utils/getUri';
 import { Command, IMessage } from './Message';
 import { ManifestPreview } from './ManifestPreview';
 
@@ -57,8 +58,8 @@ export class ManifestPreviewManager {
     }
 
     public getPreviewInitialContent(): string {
-        const stylesPath = vscode.Uri.joinPath(this._extensionPath, 'assets', 'styles', 'initial.css');
-        const scriptsPath = vscode.Uri.joinPath(this._extensionPath, 'assets', 'scripts', 'index.js');
+        const stylesPath = getUri(this._preview.getPreviewSource().webview, this._extensionPath, [ 'assets', 'styles', 'manifestPreview.css' ]);
+        const scriptsPath = getUri(this._preview.getPreviewSource().webview, this._extensionPath, [ 'assets', 'scripts', 'manifestPreview.js']);
 
         return previewTemplate(this._preview.getAsWebviewUri(stylesPath), this._preview.getAsWebviewUri(scriptsPath));
       }

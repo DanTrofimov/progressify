@@ -31,4 +31,8 @@ export class ManifestPreview implements Preview {
     getAsWebviewUri(path: vscode.Uri): vscode.Uri {
         return this._previewSource.webview.asWebviewUri(path);
     }
+
+    getPreviewSource() {
+        return this._previewSource;
+    }
 }
