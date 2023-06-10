@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { ManifestPreviewManager } from './preview/ManifestPreviewManager';
+import { ManifestPreviewManager } from './features/preview/ManifestPreviewManager';
+import { startUpPWA } from './features/generation/startUp';
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
@@ -14,6 +15,13 @@ export function activate(context: vscode.ExtensionContext) {
 				});
 			}
 		),
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand(
+			'progressify.startUpPWA',
+			startUpPWA
+		)
 	);
 }
 

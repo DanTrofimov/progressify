@@ -1,7 +1,7 @@
 // DOM nodes and styles orchestrator for static files preview
 import * as vscode from 'vscode';
-import { isManifest } from '../utils/isManifest';
-import { previewTemplate } from '../utils/previewTemplate';
+import { isManifest } from './utils/isManifest';
+import { previewTemplate } from './utils/previewTemplate';
 import { Command, IMessage } from './Message';
 import { ManifestPreview } from './ManifestPreview';
 
