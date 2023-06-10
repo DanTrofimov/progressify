@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ManifestPreviewManager } from './preview/ManifestPreviewManager';
+import { ManifestPreviewManager } from './features/preview/ManifestPreviewManager';
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
