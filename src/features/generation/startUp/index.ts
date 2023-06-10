@@ -1,18 +1,18 @@
 import * as vscode from "vscode";
 const shell = require("shelljs");
 
-const repositoryInputPrompt: string =
+const REPO_INPUT_PROMPT: string =
   "Выберите название репозитория для PWA";
-const directoryInputPrompt: string = "Выберите директорию для PWA";
-const repositoryInputPlaceholder: string = repositoryInputPrompt;
-const noNameSelectedWarning: string =
+const DIR_INPUT_PROMPT: string = "Выберите директорию для PWA";
+const REPO_INPUT_PLACEHOLDER: string = REPO_INPUT_PROMPT;
+const NO_NAME_WARNING: string =
   "Не выбрано название репозитория";
-const noGitWarning: string =
+const NO_GIT_WARNING: string =
   "Установка git обязательна, установить - https://git-scm.com/";
-const noNpmWarning: string =
+const NO_NPM_WARNING: string =
   "Установка npm обязательна, установить - https://www.npmjs.com/";
-const starterRepositoryURI: string =
-  "https://github.com/pwa-builder/pwa-starter.git";
+const STARTER_REPO_URI: string =
+  "https://github.com/DanTrofimov/progressify-starter.git";
 
 let repositoryName: string | undefined = undefined;
 let repositoryParentURI: vscode.Uri | undefined = undefined;
@@ -49,8 +49,8 @@ async function getRepositoryInfoFromInput(): Promise<void> {
 async function getRepositoryNameFromInputBox(): Promise<void> {
   return new Promise<void>(async (resolve, reject) => {
     repositoryName = await vscode.window.showInputBox({
-      prompt: repositoryInputPrompt,
-      placeHolder: repositoryInputPlaceholder,
+      prompt: REPO_INPUT_PROMPT,
+      placeHolder: REPO_INPUT_PLACEHOLDER,
     });
 
     repositoryName ? resolve() : reject();
@@ -64,7 +64,7 @@ async function getRepositoryDirectoryFromDialog(): Promise<void> {
         canSelectFolders: true,
         canSelectFiles: false,
         canSelectMany: false,
-        title: directoryInputPrompt,
+        title: DIR_INPUT_PROMPT,
       });
 
     if (directories) {
@@ -78,6 +78,7 @@ async function getRepositoryDirectoryFromDialog(): Promise<void> {
 
 function initStarterRepository(): void {
   terminal.show();
+  // for correct absolute paths
   changeDirectory('~/' + repositoryParentURI?.path.slice(1).split('/').slice(2).toString().replace(/,/g, '/'));
   if (tryCloneFromGithub()) {
     tryNpmInstall();
@@ -177,17 +178,17 @@ function isGitInstalled(): boolean {
 }
 
 function cloneCommand(): string {
-  return `git clone ${starterRepositoryURI} ${repositoryName}`;
+  return `git clone ${STARTER_REPO_URI} ${repositoryName}`;
 }
 
 function inputCanelledWarning(): void {
-  vscode.window.showWarningMessage(noNameSelectedWarning);
+  vscode.window.showWarningMessage(NO_NAME_WARNING);
 }
 
 function noGitInstalledWarning(): void {
-  vscode.window.showWarningMessage(noGitWarning);
+  vscode.window.showWarningMessage(NO_GIT_WARNING);
 }
 
 export function noNpmInstalledWarning(): void {
-  vscode.window.showWarningMessage(noNpmWarning);
+  vscode.window.showWarningMessage(NO_NPM_WARNING);
 }
