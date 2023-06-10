@@ -8,8 +8,8 @@ import { manifestGeneratorTemplate } from "../utils/manifestGeneratorPreviewTemp
 
 const pwaAssetGenerator = require('pwa-asset-generator');
 
-export class ManifestGenerationPanel {
-    public static currentPanel: ManifestGenerationPanel | undefined;
+export class ManifestGenerationManager {
+    public static currentPanel: ManifestGenerationManager | undefined;
     private readonly _panel: vscode.WebviewPanel;
     private _disposables: vscode.Disposable[] = [];
     private _extensionPath: vscode.Uri;
@@ -30,27 +30,31 @@ export class ManifestGenerationPanel {
 
         this._panel.webview.onDidReceiveMessage(
             async (message) => {
-                if (message.command === "generate-icons") {
-                    await this.generateIcons(message.options);
-                }
-                else if (message.command === "choose-base") {
-                    const icon = await this.getBaseIcon();
+                switch(message.command) {
+                    case 'generate-manifest':
+                        await this.generateManifest(message.options);
+                        return;
+                    case "choose-base": 
+                        const icon = await this.getBaseIcon();
 
-                    const onDiskPath = vscode.Uri.file(
-                        icon![0].path
-                    );
+                        const onDiskPath = vscode.Uri.file(
+                            icon![0].path
+                        );
 
-                    this.chosenIcon = icon![0];
+                        this.chosenIcon = icon![0];
 
-                    const goodIconSrc = this._panel.webview.asWebviewUri(onDiskPath);
-                    this._panel.webview.html.replace(/src=".*"/, `src="${goodIconSrc}"`);
+                        const goodIconSrc = this._panel.webview.asWebviewUri(onDiskPath);
+                        this._panel.webview.html.replace(/src=".*"/, `src="${goodIconSrc}"`);
 
-                    if (icon) {
-                        this._panel.webview.postMessage({
-                            command: "base-icon",
-                            icon: goodIconSrc,
-                        });
-                    }
+                        if (icon) {
+                            this._panel.webview.postMessage({
+                                command: "base-icon",
+                                icon: goodIconSrc,
+                            });
+                        }
+                        return;
+                    default: 
+                        console.error('Unknown command');
                 }
             },
             undefined,
@@ -58,27 +62,9 @@ export class ManifestGenerationPanel {
         );
     }
 
-    private _getWebviewContent(
-        webview: vscode.Webview,
-        extensionUri: vscode.Uri
-    ) {
-        const toolkitPath = getUri(webview, extensionUri, [
-            "node_modules",
-            "@vscode",
-            "webview-ui-toolkit",
-            "dist",
-            "toolkit.js",
-        ]);
-
-        const stylesPath = getUri(webview, extensionUri, [ 'assets', 'styles', 'manifestGenerator.css' ]);
-        const scriptsPath = getUri(webview, extensionUri, [ 'assets', 'scripts', 'manifestGenerator.js' ]);
-
-        return manifestGeneratorTemplate(stylesPath, toolkitPath, scriptsPath);
-    }
-
     public static render(extensionUri: vscode.Uri) {
-        if (ManifestGenerationPanel.currentPanel) {
-            ManifestGenerationPanel.currentPanel._panel.reveal(vscode.ViewColumn.Two);
+        if (ManifestGenerationManager.currentPanel) {
+            ManifestGenerationManager.currentPanel._panel.reveal(vscode.ViewColumn.Two);
         } else {
             const panel = vscode.window.createWebviewPanel(
                 "iconview",
@@ -90,12 +76,12 @@ export class ManifestGenerationPanel {
                 }
             );
 
-            ManifestGenerationPanel.currentPanel = new ManifestGenerationPanel(panel, extensionUri);
+            ManifestGenerationManager.currentPanel = new ManifestGenerationManager(panel, extensionUri);
         }
     }
 
     public dispose() {
-        ManifestGenerationPanel.currentPanel = undefined;
+        ManifestGenerationManager.currentPanel = undefined;
 
         this._panel.dispose();
 
@@ -105,6 +91,36 @@ export class ManifestGenerationPanel {
                 disposable.dispose();
             }
         }
+    }
+
+    async generateManifest(options: any = {}, skipPrompts?: boolean) {
+
+        const { name, theme_color, background_color, start_url, display } = options;
+        
+        const manifest: vscode.Uri = (await findManifest() as vscode.Uri);
+        
+        if (manifest) {
+            const manifestFile = await vscode.workspace.openTextDocument(
+                manifest
+            );
+
+            const manifestObject: Manifest = JSON.parse(
+                manifestFile.getText()
+            );
+
+            manifestObject.name = name;
+            manifestObject.theme_color = theme_color;
+            manifestObject.background_color = background_color;
+            manifestObject.start_url = start_url;
+            manifestObject.display = display;
+
+            await writeFile(
+                manifest.fsPath,
+                JSON.stringify(manifestObject, null, 2)
+            );
+        }
+
+        this.generateIcons(options, skipPrompts);
     }
 
     async generateIcons(options: any = {}, skipPrompts?: boolean) {
@@ -152,14 +168,14 @@ export class ManifestGenerationPanel {
                 }, async (progress) => {
                     progress.report({ message: "Generating Icons..." });
 
-                    const { savedImages, htmlMeta, manifestJsonContent } = await pwaAssetGenerator.generateImages(
+                    const { manifestJsonContent } = await pwaAssetGenerator.generateImages(
                         iconFile ? iconFile[0].fsPath : null,
                         outputDir ? outputDir[0].fsPath : null,
                         {
                             scrape: false,
                             log: false,
                             iconOnly: true,
-                            background: options.background_color || "transparent",
+                            background: options.icon_background_color || "transparent",
                             padding: options.padding || "10%",
                             maskable: options.generateMaskable || true,
                         });
@@ -176,18 +192,15 @@ export class ManifestGenerationPanel {
 
                         manifestObject.icons = manifestJsonContent;
 
-                        // transform icons to relative paths
                         manifestObject.icons?.forEach((icon: any) => {
                             icon.src = vscode.workspace.asRelativePath(icon.src);
                         });
 
-                        // write manifest file
                         await writeFile(
                             manifest.fsPath,
                             JSON.stringify(manifestObject, null, 2)
                         );
 
-                        // show manifest with vscode
                         await vscode.window.showTextDocument(manifestFile);
 
                         progress.report({ message: "Icons generated successfully!" });
@@ -201,8 +214,6 @@ export class ManifestGenerationPanel {
 
                         progress.report({ message: "Generate a Web Manifest first" });
                     }
-
-
                 });
 
             }
@@ -226,5 +237,23 @@ export class ManifestGenerationPanel {
             openLabel: 'Select your Icon file, 512x512 is preferred',
         });
         return iconFile;
+    }
+
+    private _getWebviewContent(
+        webview: vscode.Webview,
+        extensionUri: vscode.Uri
+    ) {
+        const toolkitPath = getUri(webview, extensionUri, [
+            "node_modules",
+            "@vscode",
+            "webview-ui-toolkit",
+            "dist",
+            "toolkit.js",
+        ]);
+
+        const stylesPath = getUri(webview, extensionUri, [ 'assets', 'styles', 'manifestGenerator.css' ]);
+        const scriptsPath = getUri(webview, extensionUri, [ 'assets', 'scripts', 'manifestGenerator.js' ]);
+
+        return manifestGeneratorTemplate(stylesPath, toolkitPath, scriptsPath);
     }
 }

@@ -2,15 +2,15 @@ import * as vscode from "vscode";
 const shell = require("shelljs");
 
 const REPO_INPUT_PROMPT: string =
-  "Выберите название репозитория для PWA";
-const DIR_INPUT_PROMPT: string = "Выберите директорию для PWA";
+  "Write repository name for your PWA";
+const DIR_INPUT_PROMPT: string = "Select a directory for your PWA";
 const REPO_INPUT_PLACEHOLDER: string = REPO_INPUT_PROMPT;
 const NO_NAME_WARNING: string =
-  "Не выбрано название репозитория";
+  "The repo name isn't selected";
 const NO_GIT_WARNING: string =
-  "Установка git обязательна, установить - https://git-scm.com/";
+  "Git is required, install - https://git-scm.com/";
 const NO_NPM_WARNING: string =
-  "Установка npm обязательна, установить - https://www.npmjs.com/";
+  "NPM is required, istall - https://www.npmjs.com/";
 const STARTER_REPO_URI: string =
   "https://github.com/DanTrofimov/progressify-starter.git";
 
@@ -22,7 +22,7 @@ const gitFileWatcher = vscode.workspace.createFileSystemWatcher(
   `**/${repositoryName}/.git/**`
 );
 
-export async function startUpPWA(): Promise<void> {
+export async function generateBaseStructureOfPWA(): Promise<void> {
   return new Promise(async (resolve, reject) => {
     await getRepositoryInfoFromInput();
 
