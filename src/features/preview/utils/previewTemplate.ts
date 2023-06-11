@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 export const previewTemplate = (stylesPath: vscode.Uri, scriptsPath: vscode.Uri,) => {
-    return `
+    return /*html*/`
         <!DOCTYPE html>
         <html lang="en">
             <head>

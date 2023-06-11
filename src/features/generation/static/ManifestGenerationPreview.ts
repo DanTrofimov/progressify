@@ -1,16 +1,16 @@
+import * as vscode from "vscode";
 import { WebviewPanel } from "vscode";
-import { Preview } from "../../interfaces/Preview";
-import * as vscode from 'vscode';
-import { Message } from "../../interfaces/Message";
-import { ShowOptions } from "../../interfaces/ShowOptions";
+import { ShowOptions } from "../../../interfaces/ShowOptions";
+import { Preview } from "../../../interfaces/Preview";
+import { Message } from "../../../interfaces/Message"; 
 
-export class ManifestPreview implements Preview {
+export class ManifestGeneratorPreview implements Preview {
     _previewSource: WebviewPanel;
 
     constructor(showoptions: ShowOptions, options: vscode.WebviewOptions & vscode.WebviewPanelOptions) {
         this._previewSource = vscode.window.createWebviewPanel(
-            "progressify-manifest-preview",
-            "Manifest Preview",
+            "progressify-manifest-generator",
+            "Manifest Generator",
             showoptions,
             options
         );
@@ -22,6 +22,10 @@ export class ManifestPreview implements Preview {
     
     postMessage(message: Message) {
         this._previewSource.webview.postMessage(message);
+    }
+
+    sendMessage(callback: (message: Message) => {}) {
+        this._previewSource.webview.onDidReceiveMessage(callback);
     }
 
     getAsWebviewUri(path: vscode.Uri): vscode.Uri {

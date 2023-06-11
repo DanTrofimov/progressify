@@ -1,0 +1,77 @@
+body.vscode-light {
+    color: black;
+}
+
+body.vscode-light {
+    color: black !important;
+}
+
+body.vscode-light h1 {
+    color: white;
+}
+
+vscode-button {
+    border-radius: 5px !important;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    max-width: 300px;
+}
+
+.form-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 1em;
+}
+
+#submit-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2em;
+  
+    position: sticky;
+    top: 10px;
+    z-index: 9;
+    background: #1e1e1e;
+    height: 100%;
+    padding: 10px;
+    
+    border-radius: 10px;
+  }
+
+#submit-block h1 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+form h2 {
+    font-size: 16px;
+}
+
+#submit-block button {
+    background: #487cf1;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1.1em;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+img {
+    width: 8em;
+    margin-top: 1em;
+}
+
+#base-icon {
+    display: none;
+    border-radius: 10px;
+    width: 60px;
+}

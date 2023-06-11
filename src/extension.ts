@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { ManifestPreviewManager } from './features/preview/ManifestPreviewManager';
-import { startUpPWA } from './features/generation/startUp';
+import { generateBaseStructureOfPWA } from './features/generation/startUp/generateBaseStructureOfPWA';
+import { ManifestGenerationPreviewManager } from './features/generation/static/ManifestGenerationPreviewManager';
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
@@ -20,7 +21,16 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand(
 			'progressify.startUpPWA',
-			startUpPWA
+			generateBaseStructureOfPWA
+		)
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand(
+			'progressify.generateManifest',
+			() => {
+				new ManifestGenerationPreviewManager(context);
+			}
 		)
 	);
 }
