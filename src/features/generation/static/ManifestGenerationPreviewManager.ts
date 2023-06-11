@@ -60,7 +60,7 @@ export class ManifestGenerationPreviewManager {
 
             vscode.window.withProgress({
                 location: vscode.ProgressLocation.Notification,
-                title: 'Generating Manifest',
+                title: 'Progressify',
                 cancellable: false,
             }, async (progress) => {
                 progress.report({ message: "Generating Manifest..." });

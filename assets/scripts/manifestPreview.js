@@ -1,4 +1,4 @@
-window.addEventListener('message', eventHandler);
+window.addEventListener('message', eventReducer);
 
 const SPLASH_SCREEN_HEADER_SELECTOR = ".splash-screen__header";
 const SPLASH_SCREEN_NAME_SELECTOR = ".splash-screen__name";
@@ -10,7 +10,7 @@ const SHORTCUTS_ICON_SELECTOR = '.app-icon__shortcuts';
 
 const SHORTCUTS_ITEMS_SELCTOR = '.shortcuts__item';
 
-function eventHandler(event) {
+function eventReducer(event) {
     const { command, payload } = event.data;
     
     switch(command) {
