@@ -1,5 +1,7 @@
 export enum Command {
-    update ='update_preview'
+    update ='update_preview',
+    updateBaseIcon = 'update-base-icon',
+    
 }
 
 export interface IMessage {

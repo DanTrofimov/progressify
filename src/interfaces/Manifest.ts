@@ -29,7 +29,7 @@ export interface Manifest {
     // for custom properties as well as using object notations: manifest[key]
     // @ts-ignore - accomodate custom entries... these can be a pain
     [key: string]: string | boolean | undefined | Array<any> | any;
-  }
+}
 
 export interface ShortcutItem {
     name: string;
@@ -37,7 +37,7 @@ export interface ShortcutItem {
     description?: string;
     short_name?: string;
     icons?: Icon[];
-  }
+}
 
 export interface Icon {
   src: string;

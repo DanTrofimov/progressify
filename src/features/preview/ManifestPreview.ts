@@ -1,12 +1,8 @@
 import { WebviewPanel } from "vscode";
-import { Preview } from "./Preview";
+import { Preview } from "../../interfaces/Preview";
 import * as vscode from 'vscode';
-import { IMessage } from "./Message";
-
-interface ShowOptions {
-    viewColumn: vscode.ViewColumn,
-    preserveFocus: boolean
-}
+import { IMessage } from "../../interfaces/Message";
+import { ShowOptions } from "../../interfaces/ShowOptions";
 
 export class ManifestPreview implements Preview {
     _previewSource: WebviewPanel;

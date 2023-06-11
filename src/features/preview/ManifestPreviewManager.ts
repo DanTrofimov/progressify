@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { isManifest } from './utils/isManifest';
 import { previewTemplate } from './utils/previewTemplate';
 import { getUri } from '../../utils/getUri';
-import { Command, IMessage } from './Message';
+import { Command, IMessage } from '../../interfaces/Message';
 import { ManifestPreview } from './ManifestPreview';
 
 export class ManifestPreviewManager {

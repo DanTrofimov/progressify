@@ -1,27 +1,21 @@
 import * as vscode from "vscode";
-import { Manifest } from "../IManifest";
-import { findManifest } from "../manifestService";
-import { getUri } from "../../../../utils/getUri";
+import { Manifest } from "../../../interfaces/Manifest";
+import { findManifest } from "./utils/findManifest";
+import { getUri } from "../../../utils/getUri";
 import { writeFile } from 'fs/promises';
-import path = require("path");
-import { manifestGeneratorTemplate } from "../utils/manifestGeneratorPreviewTemplate";
+import { manifestGeneratorTemplate } from "./utils/manifestGeneratorPreviewTemplate";
 
 const pwaAssetGenerator = require('pwa-asset-generator');
 
-export class ManifestGenerationManager {
-    public static currentPanel: ManifestGenerationManager | undefined;
+export class ManifestGenerationPreviewManager {
+    public static currentPanel: ManifestGenerationPreviewManager | undefined;
     private readonly _panel: vscode.WebviewPanel;
-    private _disposables: vscode.Disposable[] = [];
-    private _extensionPath: vscode.Uri;
-
     private chosenIcon: vscode.Uri | undefined;
 
     private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
         this._panel = panel;
 
-        this._panel.onDidDispose(this.dispose, null, this._disposables);
-
-        this._extensionPath = extensionUri;
+        this._panel.onDidDispose(this.dispose, null);
 
         this._panel.webview.html = this._getWebviewContent(
             this._panel.webview,
@@ -34,37 +28,20 @@ export class ManifestGenerationManager {
                     case 'generate-manifest':
                         await this.generateManifest(message.options);
                         return;
-                    case "choose-base": 
-                        const icon = await this.getBaseIcon();
-
-                        const onDiskPath = vscode.Uri.file(
-                            icon![0].path
-                        );
-
-                        this.chosenIcon = icon![0];
-
-                        const goodIconSrc = this._panel.webview.asWebviewUri(onDiskPath);
-                        this._panel.webview.html.replace(/src=".*"/, `src="${goodIconSrc}"`);
-
-                        if (icon) {
-                            this._panel.webview.postMessage({
-                                command: "base-icon",
-                                icon: goodIconSrc,
-                            });
-                        }
+                    case "choose-base-icon":
+                        await this.handleBaseIcon();
                         return;
                     default: 
                         console.error('Unknown command');
                 }
             },
-            undefined,
-            this._disposables
+            undefined
         );
     }
 
     public static render(extensionUri: vscode.Uri) {
-        if (ManifestGenerationManager.currentPanel) {
-            ManifestGenerationManager.currentPanel._panel.reveal(vscode.ViewColumn.Two);
+        if (ManifestGenerationPreviewManager.currentPanel) {
+            ManifestGenerationPreviewManager.currentPanel._panel.reveal(vscode.ViewColumn.Two);
         } else {
             const panel = vscode.window.createWebviewPanel(
                 "iconview",
@@ -76,25 +53,22 @@ export class ManifestGenerationManager {
                 }
             );
 
-            ManifestGenerationManager.currentPanel = new ManifestGenerationManager(panel, extensionUri);
+            ManifestGenerationPreviewManager.currentPanel = new ManifestGenerationPreviewManager(panel, extensionUri);
         }
     }
 
     public dispose() {
-        ManifestGenerationManager.currentPanel = undefined;
+        ManifestGenerationPreviewManager.currentPanel = undefined;
 
         this._panel.dispose();
-
-        while (this._disposables.length) {
-            const disposable = this._disposables.pop();
-            if (disposable) {
-                disposable.dispose();
-            }
-        }
     }
 
     async generateManifest(options: any = {}, skipPrompts?: boolean) {
+        this.generateMainSection(options, skipPrompts);
+        this.generateIcons(options, skipPrompts);
+    }
 
+    async generateMainSection(options: any = {}, skipPrompts?: boolean) {
         const { name, theme_color, background_color, start_url, display } = options;
         
         const manifest: vscode.Uri = (await findManifest() as vscode.Uri);
@@ -119,8 +93,6 @@ export class ManifestGenerationManager {
                 JSON.stringify(manifestObject, null, 2)
             );
         }
-
-        this.generateIcons(options, skipPrompts);
     }
 
     async generateIcons(options: any = {}, skipPrompts?: boolean) {
@@ -225,6 +197,26 @@ export class ManifestGenerationManager {
                 reject(err);
             }
         });
+    }
+
+    async handleBaseIcon() {
+        const icon = await this.getBaseIcon();
+
+        const onDiskPath = vscode.Uri.file(
+            icon![0].path
+        );
+
+        this.chosenIcon = icon![0];
+
+        const goodIconSrc = this._panel.webview.asWebviewUri(onDiskPath);
+        this._panel.webview.html.replace(/src=".*"/, `src="${goodIconSrc}"`);
+
+        if (icon) {
+            this._panel.webview.postMessage({
+                command: "update-base-icon",
+                icon: goodIconSrc,
+            });
+        }
     }
 
     async getBaseIcon() {

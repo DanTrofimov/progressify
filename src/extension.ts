@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { ManifestPreviewManager } from './features/preview/ManifestPreviewManager';
 import { generateBaseStructureOfPWA } from './features/generation/startUp/generateBaseStructureOfPWA';
-import { ManifestGenerationManager } from './features/generation/static/view/ManifestGenerationManager';
+import { ManifestGenerationPreviewManager } from './features/generation/static/ManifestGenerationPreviewManager';
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
@@ -29,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand(
 			'progressify.generateManifest',
 			async () => {
-				ManifestGenerationManager.render(context.extensionUri);
+				ManifestGenerationPreviewManager.render(context.extensionUri);
 			}
 		)
 	);

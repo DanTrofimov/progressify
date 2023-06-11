@@ -28,12 +28,12 @@ document.querySelector("#generate").addEventListener("click", () => {
 
 document.querySelector("#chooseBase").addEventListener("click", () => {
   vscode.postMessage({
-      command: 'choose-base',
+      command: 'choose-base-icon',
   });
 });
 
 window.addEventListener("message", (message) => {
-  if (message.data.command === "base-icon") {
+  if (message.data.command === "update-base-icon") {
       const baseIcon = document.querySelector("#base-icon");
       baseIcon.style.display = 'block';
       baseIcon.src = message.data.icon.external;
