@@ -72,4 +72,6 @@ img {
 
 #base-icon {
     display: none;
+    border-radius: 10px;
+    width: 60px;
 }

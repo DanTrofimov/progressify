@@ -11,6 +11,7 @@ const pwaAssetGenerator = require('pwa-asset-generator');
 export class ManifestGenerationPreviewManager {
     private _preview: ManifestGeneratorPreview;
     private _extensionPath: vscode.Uri;
+    private chosenIcon: vscode.Uri | undefined;
 
     constructor(context: vscode.ExtensionContext) {
         this._extensionPath = context.extensionUri;
@@ -98,7 +99,13 @@ export class ManifestGenerationPreviewManager {
     async generateIcons(manifestOptions: Manifest, manifestObject: Manifest, outputDir: vscode.Uri | undefined) {
         return new Promise<void>(async (resolve, reject) => {
             try {
-                let iconFile: vscode.Uri[] | undefined = await this.getBaseIcon();
+                let iconFile: vscode.Uri[] | undefined;
+
+                if (this.chosenIcon) {
+                    iconFile = [this.chosenIcon];
+                } else {
+                    iconFile = await this.getBaseIcon();
+                }
             
                 const { manifestJsonContent } = await pwaAssetGenerator.generateImages(
                     iconFile ? iconFile[0].fsPath : null,
@@ -135,6 +142,8 @@ export class ManifestGenerationPreviewManager {
         const onDiskPath = vscode.Uri.file(
             icon![0].path
         );
+
+        this.chosenIcon = icon![0];
         
         const goodIconSrc = this._preview.getPreviewSource().webview.asWebviewUri(onDiskPath);
 
