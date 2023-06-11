@@ -25,7 +25,7 @@ function eventReducer(event) {
   switch(command) {
       case 'update-base-icon':
           baseIcon.style.display = 'block';
-          baseIcon.src = message.data.payload.external;
+          baseIcon.src = payload;
           return;
       default:
           console.err('Unknown command');

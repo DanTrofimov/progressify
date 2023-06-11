@@ -9,7 +9,6 @@ import { Command, Message } from "../../../interfaces/Message";
 const pwaAssetGenerator = require('pwa-asset-generator');
 
 export class ManifestGenerationPreviewManager {
-    private chosenIcon: vscode.Uri | undefined;
     private _preview: ManifestGeneratorPreview;
     private _extensionPath: vscode.Uri;
 
@@ -99,13 +98,7 @@ export class ManifestGenerationPreviewManager {
     async generateIcons(manifestOptions: Manifest, manifestObject: Manifest, outputDir: vscode.Uri | undefined) {
         return new Promise<void>(async (resolve, reject) => {
             try {
-                let iconFile: vscode.Uri[] | undefined;
-                if (this.chosenIcon) {
-                    iconFile = [this.chosenIcon];
-                }
-                else {
-                    iconFile = await this.getBaseIcon();
-                }
+                let iconFile: vscode.Uri[] | undefined = await this.getBaseIcon();
             
                 const { manifestJsonContent } = await pwaAssetGenerator.generateImages(
                     iconFile ? iconFile[0].fsPath : null,
@@ -142,16 +135,13 @@ export class ManifestGenerationPreviewManager {
         const onDiskPath = vscode.Uri.file(
             icon![0].path
         );
-
-        this.chosenIcon = icon![0];
-
+        
         const goodIconSrc = this._preview.getPreviewSource().webview.asWebviewUri(onDiskPath);
-        this._preview.getPreviewSource().webview.html.replace(/src=".*"/, `src="${goodIconSrc}"`);
 
         if (icon) {
             this._preview.postMessage({
                 command: Command.updateBaseIcon,
-                payload: goodIconSrc,
+                payload: goodIconSrc.toString(),
             });
         }
     }
