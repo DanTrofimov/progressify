@@ -44,7 +44,7 @@ export class ManifestGenerationPreviewManager {
         );
     }
 
-    async generateManifest(manifestOptions: Manifest) {
+    public async generateManifest(manifestOptions: Manifest) {
 
         const outputDir: vscode.Uri[] | undefined = await vscode.window.showOpenDialog({
             canSelectFiles: false,
@@ -136,7 +136,7 @@ export class ManifestGenerationPreviewManager {
         });
     }
 
-    async handleBaseIcon() {
+    public async handleBaseIcon() {
         const icon = await this.getBaseIcon();
 
         const onDiskPath = vscode.Uri.file(
@@ -155,7 +155,7 @@ export class ManifestGenerationPreviewManager {
         }
     }
 
-    async getBaseIcon() {
+    public async getBaseIcon() {
         const iconFile = await vscode.window.showOpenDialog({
             canSelectFiles: true,
             canSelectMany: false,

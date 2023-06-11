@@ -44,7 +44,7 @@ export class ManifestPreviewManager {
         }
     }
 
-    private async getUpdateWebViewMessage (uri: vscode.Uri): Promise<Message> {
+    public async getUpdateWebViewMessage (uri: vscode.Uri): Promise<Message> {
         const document = await vscode.workspace.openTextDocument(uri);
     
         return {
@@ -53,11 +53,11 @@ export class ManifestPreviewManager {
         };
     }
 
-    protected getActiveEditorUri(): vscode.Uri | undefined {
+    public getActiveEditorUri(): vscode.Uri | undefined {
         return vscode.window.activeTextEditor && vscode.window.activeTextEditor.document.uri;
     }
 
-    public getPreviewInitialContent(): string {
+    private getPreviewInitialContent(): string {
         const stylesPath = getUri(this._preview.getPreviewSource().webview, this._extensionPath, [ 'assets', 'styles', 'manifestPreview.css' ]);
         const scriptsPath = getUri(this._preview.getPreviewSource().webview, this._extensionPath, [ 'assets', 'scripts', 'manifestPreview.js']);
 
