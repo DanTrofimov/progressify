@@ -13,7 +13,7 @@ const display =  document.getElementById("display");
 document.querySelector("#generate").addEventListener("click", () => {
   vscode.postMessage({
     command: 'generate-manifest',
-    options: {
+    payload: {
       icon_background_color: icon_background_color.value,
       padding: padding.value,
       generateMaskable: generateMaskable.checked,
@@ -36,6 +36,6 @@ window.addEventListener("message", (message) => {
   if (message.data.command === "update-base-icon") {
       const baseIcon = document.querySelector("#base-icon");
       baseIcon.style.display = 'block';
-      baseIcon.src = message.data.icon.external;
+      baseIcon.src = message.data.payload.external;
   }
 });

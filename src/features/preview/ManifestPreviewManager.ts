@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { isManifest } from './utils/isManifest';
 import { previewTemplate } from './utils/previewTemplate';
 import { getUri } from '../../utils/getUri';
-import { Command, IMessage } from '../../interfaces/Message';
+import { Command, Message } from '../../interfaces/Message';
 import { ManifestPreview } from './ManifestPreview';
 
 export class ManifestPreviewManager {
@@ -44,7 +44,7 @@ export class ManifestPreviewManager {
         }
     }
 
-    private async getUpdateWebViewMessage (uri: vscode.Uri): Promise<IMessage> {
+    private async getUpdateWebViewMessage (uri: vscode.Uri): Promise<Message> {
         const document = await vscode.workspace.openTextDocument(uri);
     
         return {

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { IMessage } from './Message';
+import { Message } from './Message';
 
 // webview (html), xml, etc.
 export interface Preview {
@@ -10,7 +10,7 @@ export interface Preview {
     
     initContent(eviewContent: string): void;
     
-    postMessage(message: IMessage): void;
+    postMessage(message: Message): void;
 
     getAsWebviewUri(path: vscode.Uri): vscode.Uri
 }

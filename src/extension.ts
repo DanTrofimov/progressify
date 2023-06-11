@@ -28,8 +28,8 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand(
 			'progressify.generateManifest',
-			async () => {
-				ManifestGenerationPreviewManager.render(context.extensionUri);
+			() => {
+				new ManifestGenerationPreviewManager(context);
 			}
 		)
 	);

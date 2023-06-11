@@ -1,7 +1,7 @@
 import { WebviewPanel } from "vscode";
 import { Preview } from "../../interfaces/Preview";
 import * as vscode from 'vscode';
-import { IMessage } from "../../interfaces/Message";
+import { Message } from "../../interfaces/Message";
 import { ShowOptions } from "../../interfaces/ShowOptions";
 
 export class ManifestPreview implements Preview {
@@ -20,7 +20,7 @@ export class ManifestPreview implements Preview {
         this._previewSource.webview.html = previewContent;
     }
     
-    postMessage(message: IMessage) {
+    postMessage(message: Message) {
         this._previewSource.webview.postMessage(message);
     }
 
