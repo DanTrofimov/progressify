@@ -1,12 +1,14 @@
 {
   "name": "eslint-plugin-pwa-lint",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "author": "Dan Trofimov",
   "main": "index.js",
   "peerDependencies": {
     "eslint": "8.14.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/jest "
+    "test": "./node_modules/.bin/jest",
+    "lint": "./node_modules/.bin/eslint"
   },
   "devDependencies": {
     "eslint": "8.14.0",
