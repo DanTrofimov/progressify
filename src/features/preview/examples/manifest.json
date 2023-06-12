@@ -1,5 +1,5 @@
 {
-  "name": "webapp",
+  "name": "WeatherApp",
   "short_name": "WeatherApp",
   "start_url": "/start",
   "display": "standalone",
