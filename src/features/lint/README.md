@@ -1,6 +1,6 @@
-# eslint-plugin-pwa-eslint-plugin
+# eslint-plugin-pwa-lint
 
-lint your PWA
+Lint your PWA
 
 ## Installation
 
@@ -10,10 +10,10 @@ You'll first need to install [ESLint](https://eslint.org/):
 npm i eslint --save-dev
 ```
 
-Next, install `eslint-plugin-pwa-eslint-plugin`:
+Next, install `eslint-plugin-pwa-lint`:
 
 ```sh
-npm install eslint-plugin-pwa-eslint-plugin --save-dev
+npm install eslint-plugin-pwa-lint --save-dev
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ Add `pwa-eslint-plugin` to the plugins section of your `.eslintrc` configuration
 ```json
 {
     "plugins": [
-        "pwa-eslint-plugin"
+        "eslint-plugin-pwa-lint"
     ]
 }
 ```
@@ -34,15 +34,60 @@ Then configure the rules you want to use under the rules section.
 ```json
 {
     "rules": {
-        "pwa-eslint-plugin/rule-name": 2
+        "eslint-plugin-pwa-lint/registration": {},
+        "eslint-plugin-pwa-lint/activation": {},
+        "eslint-plugin-pwa-lint/installation": {}
     }
 }
 ```
 
 ## Rules
 
-<!-- begin auto-generated rules list -->
-TODO: Run eslint-doc-generator to generate the rules list.
-<!-- end auto-generated rules list -->
+### eslint-plugin-pwa-lint/registration
 
+Check is your Service Worker correctly registered.
 
+```js
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js');
+    });
+}
+```
+
+### eslint-plugin-pwa-lint/activation
+
+Check if your Service Worker correctly handle activation event.
+
+```js
+self.addEventListener("activate", (event) => {
+    event.waitUntil(self.registration?.navigationPreload.enable());
+});
+```
+
+### eslint-plugin-pwa-lint/installation
+
+Check if your Service Worker correctly handle installation event.
+
+```js
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches
+      .open("v1")
+      .then((cache) =>
+        cache.addAll([
+          "/",
+          "/index.html",
+          "/style.css",
+          "/app.js",
+          "/image-list.js",
+          "/star-wars-logo.jpg",
+          "/gallery/",
+          "/gallery/bountyHunters.jpg",
+          "/gallery/myLittleVader.jpg",
+          "/gallery/snowTroopers.jpg",
+        ])
+      )
+  );
+});
+```
