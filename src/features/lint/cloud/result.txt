@@ -1,9 +1,0 @@
-[0m[0m
-[0m[4m<text>[24m[0m
-[0m  [2m2:9[22m  [31merror[39m  'name' is assigned a value but never used  [2mno-unused-vars[22m[0m
-[0m  [2m3:6[22m  [31merror[39m  Unexpected constant condition              [2mno-constant-condition[22m[0m
-[0m  [2m5:4[22m  [31merror[39m  Unnecessary semicolon                      [2mno-extra-semi[22m[0m
-[0m[0m
-[0m[31m[1m✖ 3 problems (3 errors, 0 warnings)[22m[39m[0m
-[0m[31m[1m[22m[39m[31m[1m  1 error and 0 warnings potentially fixable with the `--fix` option.[22m[39m[0m
-[0m[31m[1m[22m[39m[0m

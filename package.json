@@ -31,6 +31,11 @@
         "command": "progressify.generateManifest",
         "title": "Generate manifest.json",
         "category": "Progressify"
+      },
+      {
+        "command": "progressify.cloudLintFile",
+        "title": "Cloud linting of your file",
+        "category": "Progressify"
       }
     ],
     "menus": {
@@ -68,7 +73,7 @@
     "@babel/generator": "^7.22.5",
     "@babel/parser": "^7.22.5",
     "@vscode/webview-ui-toolkit": "^1.2.2",
-    "node-fetch-commonjs": "^3.2.4",
+    "node-fetch": "^2.2.6",
     "pwa-asset-generator": "^6.3.1",
     "shelljs": "^0.8.5"
   }
