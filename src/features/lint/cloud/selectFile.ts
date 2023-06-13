@@ -31,8 +31,9 @@ export async function selectFileForCloudLinting() {
 
             const response = await makeCloudFunctionRequest(fileAST);
 
-            // @ts-ignore
-            logLintingResult(response?.body);
+            const terminal = vscode.window.createTerminal();
+            terminal.show();
+            terminal.sendText(response);
 
             progress.report({ message: "Linted successfully! See terminal output" });
         });
@@ -62,7 +63,7 @@ async function makeCloudFunctionRequest<T>(ASTJson: string) {
         }
     });
 
-    const parsedResponse = await response.json();
+    const parsedResponse = await response.text();
     return parsedResponse;
 }
 
