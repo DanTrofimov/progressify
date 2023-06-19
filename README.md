@@ -14,7 +14,7 @@ yarn
 
 ## Архитектура расширения
 
-<img src="https://github.com/DanTrofimov/progressify/assets/44056222/3a68f307-3018-4d89-889f-d8c2be5821a7" width="800" />
+<img src="https://github.com/dantrofimov/progressify/raw/main/readme/arch.png" width="800" />
 
 Стек, который спользовался при написании:
 
@@ -36,14 +36,14 @@ yarn
 
 Сгенерированное превью для `manefest.json`. Превью содержит отображения `SplashScreen`, иконки с бейджом с количеством уведомлений и иконки с шорткатами. Все эти отображения конфигурируются на основе модели `manifest.json`:
 
-![image](https://github.com/DanTrofimov/progressify/assets/44056222/d72ff350-ba76-460e-a140-e7a97a6ee07b)
+<img src="https://github.com/dantrofimov/progressify/raw/main/readme/preview.png" />
 
 
 ### Модуль статического анализа PWA-специфичного кода
 
 Сериализованное с помощью `@babel/parser` AST дерево отправляется на вход Cloud Function, где оно десериализуется `@babel/generator`, после чего происходит линтинг исходного кода плагином [`eslint-plugin-pwa-lint`](https://www.npmjs.com/package/eslint-plugin-pwa-lint). 
 
-![image](https://github.com/DanTrofimov/progressify/assets/44056222/bd458683-c5a5-43c4-b0ba-5e097afe0c8c)
+<img src="https://github.com/dantrofimov/progressify/raw/main/readme/cloud.png" />
 
 
 # eslint-plugin-pwa-lint
